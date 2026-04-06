@@ -19,7 +19,6 @@ body{
   padding:20px;
 }
 
-/* ── MAIN CONTAINER ── */
 .voting-container{
   background:#ffffff;
   border-radius:30px;
@@ -136,19 +135,14 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
   border-color:#ff99ac;
   box-shadow:0 15px 20px rgba(255,153,175,.3);
 }
-.candidate-card.voted-card{
-  border-color:#fbbf24;
-  background:#fffbf0;
-}
+.candidate-card.voted-card{border-color:#fbbf24;background:#fffbf0}
 .candidate-card.winner-glow{
   box-shadow:0 0 0 4px rgba(251,191,36,.3),0 15px 25px rgba(251,191,36,.15);
 }
 
-/* rank */
 .rank-badge{
   position:absolute;top:12px;left:12px;
-  font-size:1.2em;
-  opacity:0;transition:opacity .4s;
+  font-size:1.2em;opacity:0;transition:opacity .4s;
 }
 .rank-badge.show{opacity:1}
 
@@ -168,61 +162,43 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
 
 .vote-count{
   display:inline-block;
-  background:#ffccff;
-  color:#cc0066;
+  background:#ffccff;color:#cc0066;
   padding:4px 14px;border-radius:20px;
-  font-size:.85em;font-weight:800;
-  margin-bottom:10px;
+  font-size:.85em;font-weight:800;margin-bottom:10px;
 }
 .candidate-card.voted-card .vote-count{background:#fef3c7;color:#b45309}
 
-/* bar */
 .bar-wrap{background:#f5f5f5;border-radius:10px;height:7px;margin-bottom:6px;overflow:hidden}
 .bar{height:100%;background:linear-gradient(90deg,#ff6b8b,#ffacc7);border-radius:10px;transition:width .7s ease;width:0%}
 .candidate-card.voted-card .bar{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
 
 .pct-label{font-size:.75em;color:#c9b8c9;font-weight:700;margin-bottom:14px}
 
-/* vote button */
 .vote-btn{
-  background:#ff6b8b;
-  color:#fff;border:none;
+  background:#ff6b8b;color:#fff;border:none;
   padding:12px 20px;border-radius:20px;
   font-family:'Nunito',sans-serif;
   font-size:1em;font-weight:800;
-  cursor:pointer;width:100%;
-  transition:all .2s ease;
+  cursor:pointer;width:100%;transition:all .2s ease;
 }
 .vote-btn:hover{background:#ff476f;transform:scale(1.05)}
 .vote-btn:active{transform:scale(.95)}
-.vote-btn.locked{
-  background:#f0f0f0;color:#bbb;
-  cursor:not-allowed;transform:none;
-}
-.vote-btn.my-pick{
-  background:linear-gradient(135deg,#fbbf24,#f59e0b);
-  color:#7c4a00;cursor:default;
-}
-.vote-btn.need-login{
-  background:#f9f0f3;color:#cca3b0;
-  cursor:not-allowed;transform:none;
-}
+.vote-btn.locked{background:#f0f0f0;color:#bbb;cursor:not-allowed;transform:none}
+.vote-btn.my-pick{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#7c4a00;cursor:default}
+.vote-btn.need-login{background:#f9f0f3;color:#cca3b0;cursor:not-allowed;transform:none}
 
 /* ── VOTERS LOG ── */
 .voters-section{
-  margin-top:28px;
-  padding-top:24px;
+  margin-top:28px;padding-top:24px;
   border-top:2px dashed #ffccd5;
 }
 .voters-section h3{
   font-family:'Fredoka One',cursive;
-  color:#ffaac0;font-size:1.1em;
-  margin-bottom:14px;
+  color:#ffaac0;font-size:1.1em;margin-bottom:14px;
 }
 .voters-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .voter-chip{
-  background:#ffe6ea;
-  color:#ff6b8b;
+  background:#ffe6ea;color:#ff6b8b;
   border:1.5px solid #ffccd5;
   padding:5px 14px;border-radius:20px;
   font-size:.8em;font-weight:700;
@@ -244,38 +220,29 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
 .toast.error{background:#e11d48;color:#fff}
 .toast.info{background:#9333ea;color:#fff}
 
-/* ── LOADER ── */
 .loader{
-  display:inline-block;
-  width:16px;height:16px;
+  display:inline-block;width:16px;height:16px;
   border:3px solid rgba(255,255,255,.4);
-  border-top-color:#fff;
-  border-radius:50%;
+  border-top-color:#fff;border-radius:50%;
   animation:spin .7s linear infinite;
   vertical-align:middle;margin-right:6px;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── OVERLAY ── */
 .overlay{
-  position:fixed;inset:0;
-  background:#ffe6ea;
+  position:fixed;inset:0;background:#ffe6ea;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  z-index:9998;gap:14px;
-  transition:opacity .5s;
+  z-index:9998;gap:14px;transition:opacity .5s;
 }
 .overlay.hide{opacity:0;pointer-events:none}
 .overlay p{color:#ff99ac;font-weight:800;font-size:.95em}
 .big-loader{
   width:44px;height:44px;
-  border:5px solid #ffccd5;
-  border-top-color:#ff6b8b;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
+  border:5px solid #ffccd5;border-top-color:#ff6b8b;
+  border-radius:50%;animation:spin 1s linear infinite;
 }
 
-/* confetti */
 .cp{
   position:fixed;width:9px;height:9px;border-radius:2px;
   animation:fall linear forwards;pointer-events:none;z-index:9999;
@@ -288,19 +255,16 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
 </head>
 <body>
 
-<!-- Loading overlay -->
 <div class="overlay" id="overlay">
   <div class="big-loader"></div>
   <p>Loading votes... 💖</p>
 </div>
 
 <div class="voting-container">
-
   <h1>✨ Who is the Best? ✨</h1>
   <p class="subtitle">Cast your vote for your favourite SoloLearn user!</p>
   <div class="total-badge">💖 Total Votes: <span id="totalVotes">—</span></div>
 
-  <!-- Username verify -->
   <div class="login-box">
     <label>🔐 Your SoloLearn Username</label>
     <div class="input-row">
@@ -315,15 +279,12 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
     </div>
   </div>
 
-  <!-- Cards -->
   <div class="candidates-grid" id="grid"></div>
 
-  <!-- Voters log -->
   <div class="voters-section" id="votersSection" style="display:none">
     <h3>🗳️ Who Voted</h3>
     <div class="voters-list" id="votersList"></div>
   </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
@@ -345,9 +306,6 @@ const CANDIDATES = [
   { id:'pretty',   name:'Pretty',   avatar:'✨' },
 ];
 
-// ══════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════
 let binData      = null;
 let verifiedUser = null;
 let lastAttempt  = 0;
@@ -372,16 +330,15 @@ async function updateBin(data){
 }
 
 // ══════════════════════════════════════════
-//  SL USERNAME VERIFY
+//  VERIFY — calls our own Vercel proxy
 // ══════════════════════════════════════════
 async function verifySLUser(username){
   try{
-    const url=`https://api.sololearn.com/v2/search?query=${encodeURIComponent(username)}&type=user&index=0&count=5`;
-    const r = await fetch(url);
+    // /api/verify is our serverless function on Vercel
+    // It calls SoloLearn server-side (no CORS issue)
+    const r = await fetch(`/api/verify?username=${encodeURIComponent(username)}`);
     if(!r.ok) return null;
-    const data = await r.json();
-    const users = data?.data?.users || [];
-    return users.find(u=>u.name.toLowerCase()===username.toLowerCase()) || null;
+    return await r.json(); // { found: true/false, name, id }
   }catch(e){ return null; }
 }
 
@@ -408,25 +365,25 @@ async function verifyUser(){
   // Check already voted first
   if(binData){
     const already = binData.voted_users.find(
-      v=>v.username.toLowerCase()===username.toLowerCase()
+      v => v.username.toLowerCase() === username.toLowerCase()
     );
     if(already){
       showStatus(`⚠️ "${username}" already voted for ${already.voted_for}!`,'err');
       btn.disabled=false; btn.innerHTML='Verify ✓';
-      render();
-      return;
+      render(); return;
     }
   }
 
-  const slUser = await verifySLUser(username);
+  const result = await verifySLUser(username);
 
-  if(!slUser){
+  if(!result || !result.found){
     showStatus(`❌ "${username}" not found on SoloLearn! Check spelling.`,'err');
     btn.disabled=false; btn.innerHTML='Verify ✓';
     return;
   }
 
-  verifiedUser = slUser.name;
+  // ✅ Verified!
+  verifiedUser = result.name;
   document.getElementById('pillName').textContent = verifiedUser;
   document.getElementById('userPill').classList.add('show');
   showStatus(`✅ Welcome ${verifiedUser}! Now pick your favourite below 👇`,'ok');
@@ -435,27 +392,25 @@ async function verifyUser(){
 }
 
 function showStatus(msg,type){
-  const el=document.getElementById('statusMsg');
-  el.textContent=msg;
-  el.className='status-msg show '+type;
+  const el = document.getElementById('statusMsg');
+  el.textContent = msg;
+  el.className = 'status-msg show '+type;
 }
 
 // ══════════════════════════════════════════
 //  VOTE
 // ══════════════════════════════════════════
 async function handleVote(candidateId){
-  if(!verifiedUser){
-    showToast('🔐 Verify your SL username first!','warn'); return;
-  }
+  if(!verifiedUser){ showToast('🔐 Verify your SL username first!','warn'); return; }
 
   const already = binData.voted_users.find(
-    v=>v.username.toLowerCase()===verifiedUser.toLowerCase()
+    v => v.username.toLowerCase() === verifiedUser.toLowerCase()
   );
   if(already){ showToast('⚠️ You already voted!','warn'); return; }
 
-  const now=Date.now();
-  if(now-lastAttempt<3000){ showToast('🐢 Slow down!','warn'); return; }
-  lastAttempt=now;
+  const now = Date.now();
+  if(now - lastAttempt < 3000){ showToast('🐢 Slow down!','warn'); return; }
+  lastAttempt = now;
 
   document.querySelectorAll('.vote-btn').forEach(b=>{
     b.disabled=true; b.className='vote-btn locked';
@@ -467,16 +422,16 @@ async function handleVote(candidateId){
     const latest = await fetchBin();
 
     const doubleCheck = latest.voted_users.find(
-      v=>v.username.toLowerCase()===verifiedUser.toLowerCase()
+      v => v.username.toLowerCase() === verifiedUser.toLowerCase()
     );
     if(doubleCheck){
-      binData=latest;
+      binData = latest;
       showToast('⚠️ Username already voted!','error');
-      verifiedUser=null; render(); return;
+      verifiedUser = null; render(); return;
     }
 
-    const cand = CANDIDATES.find(c=>c.id===candidateId);
-    latest.votes[candidateId] = (latest.votes[candidateId]||0)+1;
+    const cand = CANDIDATES.find(c => c.id === candidateId);
+    latest.votes[candidateId] = (latest.votes[candidateId]||0) + 1;
     latest.voted_users.push({
       username: verifiedUser,
       voted_for: cand.name,
@@ -485,16 +440,12 @@ async function handleVote(candidateId){
 
     await updateBin(latest);
     binData = latest;
-
     showToast(`💖 Voted for ${cand.name}! Thank you!`,'success');
     launchConfetti();
     render();
 
   }catch(e){
     showToast('❌ Error! Try again.','error');
-    document.querySelectorAll('.vote-btn').forEach(b=>{
-      b.disabled=false;
-    });
     render();
   }
 }
@@ -504,51 +455,49 @@ async function handleVote(candidateId){
 // ══════════════════════════════════════════
 function render(){
   if(!binData) return;
-
-  const votes      = binData.votes||{};
-  const votedUsers = binData.voted_users||[];
+  const votes      = binData.votes || {};
+  const votedUsers = binData.voted_users || [];
   const total      = Object.values(votes).reduce((a,b)=>a+b,0);
 
   document.getElementById('totalVotes').textContent = total;
 
   const myRecord = verifiedUser
-    ? votedUsers.find(v=>v.username.toLowerCase()===verifiedUser.toLowerCase())
+    ? votedUsers.find(v => v.username.toLowerCase() === verifiedUser.toLowerCase())
     : null;
 
-  const sorted=[...CANDIDATES].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0));
-  const rankMap={};
-  sorted.forEach((c,i)=>rankMap[c.id]=i+1);
+  const sorted = [...CANDIDATES].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0));
+  const rankMap = {};
+  sorted.forEach((c,i) => rankMap[c.id] = i+1);
 
-  const grid=document.getElementById('grid');
-  grid.innerHTML='';
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
 
-  CANDIDATES.forEach(c=>{
-    const v   = votes[c.id]||0;
-    const pct = total>0?Math.round(v/total*100):0;
-    const rank= rankMap[c.id];
-    const isMyVote = myRecord?.voted_for===c.name;
-    const isWinner = rank===1&&total>0;
-    const rankEmoji= rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+  CANDIDATES.forEach(c => {
+    const v   = votes[c.id] || 0;
+    const pct = total > 0 ? Math.round(v/total*100) : 0;
+    const rank = rankMap[c.id];
+    const isMyVote = myRecord?.voted_for === c.name;
+    const isWinner = rank === 1 && total > 0;
+    const rankEmoji = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
 
     let btnClass='vote-btn', btnText='Vote! 💖';
-    if(isMyVote){     btnClass='vote-btn my-pick';    btnText='✅ Your Pick'; }
-    else if(myRecord){btnClass='vote-btn locked';     btnText='🔒 Voted';    }
-    else if(!verifiedUser){btnClass='vote-btn need-login'; btnText='Verify first 🔐'; }
+    if(isMyVote)      { btnClass='vote-btn my-pick';   btnText='✅ Your Pick'; }
+    else if(myRecord) { btnClass='vote-btn locked';    btnText='🔒 Voted'; }
+    else if(!verifiedUser){ btnClass='vote-btn need-login'; btnText='Verify first 🔐'; }
 
-    const card=document.createElement('div');
-    card.className='candidate-card'
+    const card = document.createElement('div');
+    card.className = 'candidate-card'
       +(isMyVote?' voted-card':'')
       +(isWinner?' winner-glow':'');
 
-    card.innerHTML=`
+    card.innerHTML = `
       <div class="rank-badge ${total>0?'show':''}">${rankEmoji}</div>
       <div class="avatar">${c.avatar}</div>
       <div class="name">${c.name}</div>
       <div class="vote-count">${v} Vote${v!==1?'s':''}</div>
       <div class="bar-wrap"><div class="bar" style="width:${pct}%"></div></div>
       <div class="pct-label">${pct}% of votes</div>
-      <button class="${btnClass}"
-        onclick="handleVote('${c.id}')"
+      <button class="${btnClass}" onclick="handleVote('${c.id}')"
         ${(myRecord||!verifiedUser)?'disabled':''}>
         ${btnText}
       </button>
@@ -557,15 +506,15 @@ function render(){
   });
 
   // Voters log
-  const vs=document.getElementById('votersSection');
-  const vl=document.getElementById('votersList');
-  if(votedUsers.length>0){
-    vs.style.display='block';
-    vl.innerHTML=votedUsers.map(v=>
+  const vs = document.getElementById('votersSection');
+  const vl = document.getElementById('votersList');
+  if(votedUsers.length > 0){
+    vs.style.display = 'block';
+    vl.innerHTML = votedUsers.map(v =>
       `<div class="voter-chip">👤 ${v.username} → ${v.voted_for}</div>`
     ).join('');
   } else {
-    vs.style.display='none';
+    vs.style.display = 'none';
   }
 }
 
@@ -574,10 +523,10 @@ function render(){
 // ══════════════════════════════════════════
 let toastTimer;
 function showToast(msg,type='success'){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast '+type+' show';
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast '+type+' show';
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.className='toast',3000);
+  toastTimer = setTimeout(()=>t.className='toast', 3000);
 }
 
 // ══════════════════════════════════════════
@@ -586,9 +535,9 @@ function showToast(msg,type='success'){
 function launchConfetti(){
   const colors=['#ff6b8b','#ffacc7','#fbbf24','#34d399','#c084fc','#ffccd5'];
   for(let i=0;i<50;i++){
-    const el=document.createElement('div');
-    el.className='cp';
-    el.style.cssText=`
+    const el = document.createElement('div');
+    el.className = 'cp';
+    el.style.cssText = `
       left:${Math.random()*100}vw;top:-10px;
       background:${colors[Math.floor(Math.random()*colors.length)]};
       width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;
@@ -615,14 +564,14 @@ async function init(){
   }catch(e){
     showToast('❌ Could not load votes!','error');
   }finally{
-    const ov=document.getElementById('overlay');
+    const ov = document.getElementById('overlay');
     ov.classList.add('hide');
-    setTimeout(()=>ov.remove(),600);
+    setTimeout(()=>ov.remove(), 600);
   }
 }
 
 document.getElementById('usernameInput')
-  .addEventListener('keydown',e=>{ if(e.key==='Enter') verifyUser(); });
+  .addEventListener('keydown', e=>{ if(e.key==='Enter') verifyUser(); });
 
 init();
 </script>
