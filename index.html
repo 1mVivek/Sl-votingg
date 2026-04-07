@@ -306,9 +306,6 @@ async function fetchBin(){
   if(!r.ok) throw new Error('Fetch failed');
   return await r.json();
 }
-  if(!r.ok) throw new Error('Update failed');
-}
-
 // ── ENTER USERNAME ──
 function enterUser(){
   const input    = document.getElementById('usernameInput');
@@ -395,25 +392,6 @@ async function handleVote(candidateId){
 }catch(e){
   showToast('❌ Network error','error');
   render();
-  }
-
-    const cand = CANDIDATES.find(c => c.id === candidateId);
-    latest.votes[candidateId] = (latest.votes[candidateId]||0) + 1;
-    latest.voted_users.push({
-      username: activeUser,
-      voted_for: cand.name,
-      time: new Date().toISOString()
-    });
-
-    await updateBin(latest);
-    binData = latest;
-    showToast(`💖 Voted for ${cand.name}! Thank you!`,'success');
-    launchConfetti();
-    render();
-
-  }catch(e){
-    showToast('❌ Error! Try again.','error');
-    render();
   }
 }
 
