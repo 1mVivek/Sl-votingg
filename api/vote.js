@@ -1,81 +1,36 @@
+// api/votes.js
+// GET /api/votes  → public vote counts
+// No API key exposed to client
+
+const BIN_URL = `https://api.jsonbin.io/v3/b/${process.env.JSONBIN_BIN_ID}/latest`;
+
 export default async function handler(req, res) {
+  // CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Method not allowed" });
-    }
-
-    const { username, candidate } = req.body || {};
-
-    // 🔐 Input validation
-    if (
-      typeof username !== "string" ||
-      typeof candidate !== "string" ||
-      username.trim().length < 2 ||
-      username.length > 30
-    ) {
-      return res.status(400).json({ error: "Invalid input" });
-    }
-
-    const user = username.toLowerCase().trim();
-
-    // 🔒 Whitelist
-    const ALLOWED_USERS = ["vivek", "mimileni", "batman", "pretty"];
-
-    if (!ALLOWED_USERS.includes(user)) {
-      return res.status(403).json({ error: "❌ You are not allowed to vote" });
-    }
-
-    const BIN_ID = process.env.BIN_ID;
-    const API_KEY = process.env.JSONBIN_KEY;
-    const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
-    // 📥 Fetch latest
-    const r = await fetch(BIN_URL + "/latest", {
-      headers: { "X-Master-Key": API_KEY }
+    const r = await fetch(BIN_URL, {
+      headers: {
+        'X-Master-Key': process.env.JSONBIN_API_KEY,
+      },
     });
 
-    if (!r.ok) throw new Error("Fetch failed");
+    if (!r.ok) throw new Error('JSONBin fetch failed: ' + r.status);
 
     const json = await r.json();
-    const data = json.record || json;
+    const data = json.record;
 
-    if (!data.votes) data.votes = {};
-    if (!Array.isArray(data.voted_users)) data.voted_users = [];
-
-    // 🔁 Prevent duplicate vote
-    const already = data.voted_users.find(
-      v => v.username.toLowerCase() === user
-    );
-
-    if (already) {
-      return res.status(409).json({ error: "⚠️ You already voted!" });
-    }
-
-    // 📊 Update vote
-    data.votes[candidate] = (data.votes[candidate] || 0) + 1;
-
-    data.voted_users.push({
-      username: user,
-      voted_for: candidate,
-      time: new Date().toISOString()
+    // Only return vote counts — never expose allowed_voters or voted list
+    return res.status(200).json({
+      votes: data.votes || { p1: 0, p2: 0, p3: 0 },
     });
-
-    // 📤 Save
-    const update = await fetch(BIN_URL, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": API_KEY
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (!update.ok) throw new Error("Update failed");
-
-    return res.json({ success: true });
-
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Server error" });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
 }
