@@ -36,7 +36,8 @@ export default async function handler(req, res) {
 
     if (!r.ok) throw new Error("Fetch failed");
 
-    const data = await r.json();
+    const json = await r.json();
+    const data = json.record || json;
 
     if (!data.votes) data.votes = {};
     if (!Array.isArray(data.voted_users)) data.voted_users = [];
