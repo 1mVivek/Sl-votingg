@@ -79,7 +79,7 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
 .login-box input:focus{border-color:#ff6b8b}
 .login-box input::placeholder{color:#ccc;font-weight:600}
 
-.verify-btn{
+.enter-btn{
   background:#ff6b8b;
   color:#fff;border:none;
   padding:11px 20px;border-radius:14px;
@@ -88,9 +88,8 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
   cursor:pointer;white-space:nowrap;
   transition:transform .2s,background .2s;
 }
-.verify-btn:hover{background:#ff476f;transform:scale(1.05)}
-.verify-btn:active{transform:scale(.95)}
-.verify-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.enter-btn:hover{background:#ff476f;transform:scale(1.05)}
+.enter-btn:active{transform:scale(.95)}
 
 .status-msg{
   margin-top:10px;padding:9px 14px;
@@ -266,16 +265,16 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
   <div class="total-badge">💖 Total Votes: <span id="totalVotes">—</span></div>
 
   <div class="login-box">
-    <label>🔐 Your SoloLearn Username</label>
+    <label>👤 Your SoloLearn Username</label>
     <div class="input-row">
-      <input type="text" id="usernameInput" placeholder="Enter SL username..." autocomplete="off" />
-      <button class="verify-btn" id="verifyBtn" onclick="verifyUser()">Verify ✓</button>
+      <input type="text" id="usernameInput" placeholder="Enter your SL username..." autocomplete="off" />
+      <button class="enter-btn" id="enterBtn" onclick="enterUser()">Let's Go! 💖</button>
     </div>
     <div class="status-msg" id="statusMsg"></div>
     <div class="user-pill" id="userPill">
       <span>💖</span>
       <span class="uname" id="pillName"></span>
-      <span class="utag">✅ Verified SL User</span>
+      <span class="utag">Now vote below! 👇</span>
     </div>
   </div>
 
@@ -290,16 +289,10 @@ p.subtitle{color:#a39ca3;margin-bottom:24px;font-size:1.05em}
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════════
 const BIN_ID  = '69d2da8f36566621a880ddb6';
 const API_KEY = '$2a$10$kly9LzQS6IQBMF54IUn6wuuo7DhUjmyI3peWxzU35JtRhG0DndrrC';
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-// ══════════════════════════════════════════
-//  CANDIDATES
-// ══════════════════════════════════════════
 const CANDIDATES = [
   { id:'mimileni', name:'Mimileni', avatar:'🌸' },
   { id:'batman',   name:'Batman',   avatar:'🦇' },
@@ -307,12 +300,9 @@ const CANDIDATES = [
 ];
 
 let binData      = null;
-let verifiedUser = null;
+let activeUser   = null;
 let lastAttempt  = 0;
 
-// ══════════════════════════════════════════
-//  JSONBIN
-// ══════════════════════════════════════════
 async function fetchBin(){
   const r = await fetch(BIN_URL+'/latest',{
     headers:{'X-Master-Key':API_KEY,'X-Bin-Meta':'false'}
@@ -329,82 +319,53 @@ async function updateBin(data){
   if(!r.ok) throw new Error('Update failed');
 }
 
-// ══════════════════════════════════════════
-//  VERIFY — calls our own Vercel proxy
-// ══════════════════════════════════════════
-async function verifySLUser(username){
-  try{
-    // /api/verify is our serverless function on Vercel
-    // It calls SoloLearn server-side (no CORS issue)
-    const r = await fetch(`/api/verify?username=${encodeURIComponent(username)}`);
-    if(!r.ok) return null;
-    return await r.json(); // { found: true/false, name, id }
-  }catch(e){ return null; }
-}
-
-// ══════════════════════════════════════════
-//  VERIFY BUTTON
-// ══════════════════════════════════════════
-async function verifyUser(){
+// ── ENTER USERNAME ──
+function enterUser(){
   const input    = document.getElementById('usernameInput');
-  const btn      = document.getElementById('verifyBtn');
   const username = input.value.trim();
 
-  if(!username){ showStatus('Please enter your username 😅','err'); return; }
+  if(!username || username.length < 2){
+    showStatus('Please enter your SL username 😅','err'); return;
+  }
+  if(username.length > 30){
+    showStatus('Username too long!','err'); return;
+  }
 
-  const now = Date.now();
-  if(now - lastAttempt < 4000){ showToast('⏳ Wait a moment!','warn'); return; }
-  lastAttempt = now;
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loader"></span>Checking...';
-  showStatus('Searching SoloLearn...','info');
-  document.getElementById('userPill').classList.remove('show');
-  verifiedUser = null;
-
-  // Check already voted first
+  // Check if already voted
   if(binData){
     const already = binData.voted_users.find(
       v => v.username.toLowerCase() === username.toLowerCase()
     );
     if(already){
       showStatus(`⚠️ "${username}" already voted for ${already.voted_for}!`,'err');
-      btn.disabled=false; btn.innerHTML='Verify ✓';
-      render(); return;
+      // Still show the results with their vote highlighted
+      activeUser = username;
+      render();
+      return;
     }
   }
 
-  const result = await verifySLUser(username);
-
-  if(!result || !result.found){
-    showStatus(`❌ "${username}" not found on SoloLearn! Check spelling.`,'err');
-    btn.disabled=false; btn.innerHTML='Verify ✓';
-    return;
-  }
-
-  // ✅ Verified!
-  verifiedUser = result.name;
-  document.getElementById('pillName').textContent = verifiedUser;
+  activeUser = username;
+  document.getElementById('pillName').textContent = username;
   document.getElementById('userPill').classList.add('show');
-  showStatus(`✅ Welcome ${verifiedUser}! Now pick your favourite below 👇`,'ok');
-  btn.disabled=false; btn.innerHTML='Verify ✓';
+  showStatus(`Hey ${username}! Pick your favourite below 👇`,'ok');
   render();
 }
 
-function showStatus(msg,type){
+function showStatus(msg, type){
   const el = document.getElementById('statusMsg');
   el.textContent = msg;
-  el.className = 'status-msg show '+type;
+  el.className = 'status-msg show ' + type;
 }
 
-// ══════════════════════════════════════════
-//  VOTE
-// ══════════════════════════════════════════
+// ── VOTE ──
 async function handleVote(candidateId){
-  if(!verifiedUser){ showToast('🔐 Verify your SL username first!','warn'); return; }
+  if(!activeUser){
+    showToast('👤 Enter your username first!','warn'); return;
+  }
 
   const already = binData.voted_users.find(
-    v => v.username.toLowerCase() === verifiedUser.toLowerCase()
+    v => v.username.toLowerCase() === activeUser.toLowerCase()
   );
   if(already){ showToast('⚠️ You already voted!','warn'); return; }
 
@@ -418,22 +379,22 @@ async function handleVote(candidateId){
   showToast('💾 Saving your vote...','info');
 
   try{
-    // Re-fetch latest to prevent race condition
     const latest = await fetchBin();
 
+    // Race condition check
     const doubleCheck = latest.voted_users.find(
-      v => v.username.toLowerCase() === verifiedUser.toLowerCase()
+      v => v.username.toLowerCase() === activeUser.toLowerCase()
     );
     if(doubleCheck){
       binData = latest;
-      showToast('⚠️ Username already voted!','error');
-      verifiedUser = null; render(); return;
+      showToast('⚠️ Already voted!','error');
+      render(); return;
     }
 
     const cand = CANDIDATES.find(c => c.id === candidateId);
     latest.votes[candidateId] = (latest.votes[candidateId]||0) + 1;
     latest.voted_users.push({
-      username: verifiedUser,
+      username: activeUser,
       voted_for: cand.name,
       time: new Date().toISOString()
     });
@@ -450,9 +411,7 @@ async function handleVote(candidateId){
   }
 }
 
-// ══════════════════════════════════════════
-//  RENDER
-// ══════════════════════════════════════════
+// ── RENDER ──
 function render(){
   if(!binData) return;
   const votes      = binData.votes || {};
@@ -461,8 +420,8 @@ function render(){
 
   document.getElementById('totalVotes').textContent = total;
 
-  const myRecord = verifiedUser
-    ? votedUsers.find(v => v.username.toLowerCase() === verifiedUser.toLowerCase())
+  const myRecord = activeUser
+    ? votedUsers.find(v => v.username.toLowerCase() === activeUser.toLowerCase())
     : null;
 
   const sorted = [...CANDIDATES].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0));
@@ -473,17 +432,17 @@ function render(){
   grid.innerHTML = '';
 
   CANDIDATES.forEach(c => {
-    const v   = votes[c.id] || 0;
-    const pct = total > 0 ? Math.round(v/total*100) : 0;
+    const v    = votes[c.id] || 0;
+    const pct  = total > 0 ? Math.round(v/total*100) : 0;
     const rank = rankMap[c.id];
     const isMyVote = myRecord?.voted_for === c.name;
     const isWinner = rank === 1 && total > 0;
     const rankEmoji = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
 
     let btnClass='vote-btn', btnText='Vote! 💖';
-    if(isMyVote)      { btnClass='vote-btn my-pick';   btnText='✅ Your Pick'; }
-    else if(myRecord) { btnClass='vote-btn locked';    btnText='🔒 Voted'; }
-    else if(!verifiedUser){ btnClass='vote-btn need-login'; btnText='Verify first 🔐'; }
+    if(isMyVote)           { btnClass='vote-btn my-pick';   btnText='✅ Your Pick'; }
+    else if(myRecord)      { btnClass='vote-btn locked';    btnText='🔒 Voted'; }
+    else if(!activeUser)   { btnClass='vote-btn need-login';btnText='Enter name first 👤'; }
 
     const card = document.createElement('div');
     card.className = 'candidate-card'
@@ -498,7 +457,7 @@ function render(){
       <div class="bar-wrap"><div class="bar" style="width:${pct}%"></div></div>
       <div class="pct-label">${pct}% of votes</div>
       <button class="${btnClass}" onclick="handleVote('${c.id}')"
-        ${(myRecord||!verifiedUser)?'disabled':''}>
+        ${(myRecord||!activeUser)?'disabled':''}>
         ${btnText}
       </button>
     `;
@@ -518,20 +477,16 @@ function render(){
   }
 }
 
-// ══════════════════════════════════════════
-//  TOAST
-// ══════════════════════════════════════════
+// ── TOAST ──
 let toastTimer;
-function showToast(msg,type='success'){
+function showToast(msg, type='success'){
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = 'toast '+type+' show';
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>t.className='toast', 3000);
 }
 
-// ══════════════════════════════════════════
-//  CONFETTI
-// ══════════════════════════════════════════
+// ── CONFETTI ──
 function launchConfetti(){
   const colors=['#ff6b8b','#ffacc7','#fbbf24','#34d399','#c084fc','#ffccd5'];
   for(let i=0;i<50;i++){
@@ -550,9 +505,7 @@ function launchConfetti(){
   }
 }
 
-// ══════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════
+// ── INIT ──
 async function init(){
   try{
     binData = await fetchBin();
@@ -571,7 +524,7 @@ async function init(){
 }
 
 document.getElementById('usernameInput')
-  .addEventListener('keydown', e=>{ if(e.key==='Enter') verifyUser(); });
+  .addEventListener('keydown', e=>{ if(e.key==='Enter') enterUser(); });
 
 init();
 </script>
