@@ -56,6 +56,10 @@ export default async function handler(req, res) {
     data.votes[candidateId] = (data.votes[candidateId] || 0) + 1;
     data.voted = [...(data.voted || []), nameLower];
 
+    // 3b. Log who voted for whom
+    data.vote_log = data.vote_log || { p1: [], p2: [], p3: [] };
+    data.vote_log[candidateId] = [...(data.vote_log[candidateId] || []), name.trim()];
+
     // 4. Save back
     const putRes = await fetch(BIN_URL_BASE, {
       method: 'PUT',
